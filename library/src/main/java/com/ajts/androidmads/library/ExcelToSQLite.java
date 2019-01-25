@@ -135,6 +135,8 @@ public class ExcelToSQLite {
 
     private void createTable(Sheet sheet) {
         Cursor cursor = null;
+        if( sheet.getSheetName().equals("sqlite_sequence"))
+            return;
         try {
             StringBuilder createTableSql = new StringBuilder("CREATE TABLE IF NOT EXISTS ");
             createTableSql.append(sheet.getSheetName());
