@@ -31,6 +31,7 @@ public class SQLiteToExcel {
     private HSSFWorkbook workbook;
 
     private List<String> mExcludeColumns = null;
+    private List<String> mExcludeTables = null;
     private HashMap<String, String> mPrettyNameMapping = null;
     private ExportCustomFormatter mCustomFormatter = null;
 
@@ -54,6 +55,15 @@ public class SQLiteToExcel {
      */
     public void setExcludeColumns(List<String> excludeColumns) {
         mExcludeColumns = excludeColumns;
+    }
+
+    /**
+     * Set the exclude table list
+     *
+     * @param excludeTables
+     */
+    public void setExcludeValuesFromTables(List<String> excludeTables) {
+        mExcludeTables = excludeTables;
     }
 
     /**
@@ -171,7 +181,8 @@ public class SQLiteToExcel {
                 cellIndex++;
             }
         }
-        insertItemToSheet(table, sheet, columns);
+        if( !excludeValuesFromTable(table))
+            insertItemToSheet(table, sheet, columns);
     }
 
     private void insertItemToSheet(String table, HSSFSheet sheet, ArrayList<String> columns) {
@@ -216,6 +227,21 @@ public class SQLiteToExcel {
         boolean exclude = false;
         if (null != mExcludeColumns) {
             return mExcludeColumns.contains(column);
+        }
+
+        return exclude;
+    }
+
+    /**
+     * Do we exclude the specified table from the export
+     *
+     * @param table
+     * @return boolean
+     */
+    private boolean excludeValuesFromTable(String table) {
+        boolean exclude = false;
+        if (null != mExcludeTables) {
+            return mExcludeTables.contains(table);
         }
 
         return exclude;
